@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-"""Module"""
-
+"""
+Returns info about an employee's TODO list progress using their employee ID.
+"""
 import requests
 import sys
-
 
 """Module"""
 
