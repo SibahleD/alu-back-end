@@ -7,6 +7,7 @@ import csv
 def get_employee_todo_progress(employee_id):
     base_url = "https://jsonplaceholder.typicode.com"
 
+    # Fetch the employee details
     user_url = f"{base_url}/users/{employee_id}"
     user_response = requests.get(user_url)
     
@@ -27,6 +28,7 @@ def get_employee_todo_progress(employee_id):
 
     todos_data = todos_response.json()
 
+    # Calculate the number of completed and total tasks
     total_tasks = len(todos_data)
     done_tasks = [task for task in todos_data if task['completed']]
     number_of_done_tasks = len(done_tasks)
@@ -36,6 +38,7 @@ def get_employee_todo_progress(employee_id):
     for task in done_tasks:
         print(f"\t {task['title']}")
 
+    # Export tasks to CSV file
     csv_filename = f"{employee_id}.csv"
     with open(csv_filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)

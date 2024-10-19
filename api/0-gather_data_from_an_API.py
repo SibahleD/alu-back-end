@@ -6,6 +6,7 @@ import sys
 def get_employee_todo_progress(employee_id):
     base_url = "https://jsonplaceholder.typicode.com"
 
+    # Fetch the employee details
     user_url = f"{base_url}/users/{employee_id}"
     user_response = requests.get(user_url)
     
@@ -25,6 +26,7 @@ def get_employee_todo_progress(employee_id):
 
     todos_data = todos_response.json()
 
+    # Calculate the number of completed and total tasks
     total_tasks = len(todos_data)
     done_tasks = [task for task in todos_data if task['completed']]
     number_of_done_tasks = len(done_tasks)

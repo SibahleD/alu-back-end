@@ -7,6 +7,7 @@ import json
 def get_employee_todo_progress(employee_id):
     base_url = "https://jsonplaceholder.typicode.com"
 
+    # Fetch the employee details
     user_url = f"{base_url}/users/{employee_id}"
     user_response = requests.get(user_url)
     
@@ -27,6 +28,7 @@ def get_employee_todo_progress(employee_id):
 
     todos_data = todos_response.json()
 
+    # Calculate the number of completed and total tasks
     total_tasks = len(todos_data)
     done_tasks = [task for task in todos_data if task['completed']]
     number_of_done_tasks = len(done_tasks)
@@ -39,6 +41,7 @@ def get_employee_todo_progress(employee_id):
     tasks_list = [{"task": task["title"], "completed": task["completed"], "username": username} for task in todos_data]
     json_data = {str(employee_id): tasks_list}
 
+    # Export tasks to JSON file
     json_filename = f"{employee_id}.json"
     with open(json_filename, mode='w', encoding='utf-8') as file:
         json.dump(json_data, file, indent=4)
