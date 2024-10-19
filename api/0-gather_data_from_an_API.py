@@ -8,47 +8,48 @@ import requests
 import sys
 
 def get_employee_todo_progress(employee_id):
-    base_url = "https://jsonplaceholder.typicode.com"
-
-    # Fetch the employee details
-    user_url = f"{base_url}/users/{employee_id}"
+    # Fetch employee details
+    user_url = f'https://jsonplaceholder.typicode.com/users/{employee_id}'
     user_response = requests.get(user_url)
     
     if user_response.status_code != 200:
-        print("Error: Unable to fetch employee details")
+        print(f"Employee with ID {employee_id} not found.")
         return
 
     user_data = user_response.json()
-    employee_name = user_data['name']
+    employee_name = user_data.get('name')
 
-    todos_url = f"{base_url}/todos?userId={employee_id}"
+    # Fetch employee TODO list
+    todos_url = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
     todos_response = requests.get(todos_url)
 
     if todos_response.status_code != 200:
-        print("Error: Unable to fetch TODO list")
+        print("Failed to fetch TODO list for employee.")
         return
 
-    todos_data = todos_response.json()
+    todos = todos_response.json()
 
-    # Calculate the number of completed and total tasks
-    total_tasks = len(todos_data)
-    done_tasks = [task for task in todos_data if task['completed']]
-    number_of_done_tasks = len(done_tasks)
+    # Calculate completed and total tasks
+    completed_tasks = [todo for todo in todos if todo.get('completed')]
+    total_tasks = len(todos)
+    completed_task_count = len(completed_tasks)
 
-    print(f"Employee {employee_name} is done with tasks({number_of_done_tasks}/{total_tasks}):")
+    # Display the output
+    print(f"Employee {employee_name} is done with tasks({completed_task_count}/{total_tasks}):")
+    
+    # Print completed task titles
+    for task in completed_tasks:
+        print(f"\t {task.get('title')}")
 
-    for task in done_tasks:
-        print(f"\t {task['title']}")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print("Usage: python script.py <employee_id>")
+        print("Usage: python3 script.py <employee_id>")
         sys.exit(1)
-
+    
     try:
         employee_id = int(sys.argv[1])
     except ValueError:
-        print("Error: employee_id must be an integer")
+        print("Employee ID must be an integer.")
         sys.exit(1)
 
     get_employee_todo_progress(employee_id)
