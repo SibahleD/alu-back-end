@@ -1,5 +1,10 @@
 #!/usr/bin/python3
 
+"""
+Returns information about an employee's TODO list progress using their employee ID and saves to a CSV file.
+"""
+
+
 import requests
 import sys
 import csv
