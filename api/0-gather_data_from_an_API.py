@@ -1,9 +1,11 @@
 #!/usr/bin/python3
-"""
-Returns information about an employee's TODO list progress using their employee ID.
-"""
+"""Module"""
+
 import requests
 import sys
+
+
+"""Module"""
 
 if __name__ == '__main__':
     user_id = sys.argv[1]
