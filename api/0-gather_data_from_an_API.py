@@ -5,31 +5,23 @@ Returns information about an employee's TODO list progress using their employee 
 import requests
 import sys
 
+if __name__ == '__main__':
+    user_id = sys.argv[1]
+    user_url = "https://jsonplaceholder.typicode.com/users/{}" \
+        .format(user_id)
+    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos/" \
+        .format(user_id)
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print(f"UsageError: python3 {__file__} employee_id(int)")
-        sys.exit(1)
+    user_info = requests.request('GET', user_url).json()
+    todos_info = requests.request('GET', todos_url).json()
 
-    url_req = "https://jsonplaceholder.typicode.com"
-    employee_id = sys.argv[1]
+    employee_name = user_info["name"]
+    task_completed = list(filter(lambda obj:
+                                 (obj["completed"] is True), todos_info))
+    number_of_done_tasks = len(task_completed)
+    total_number_of_tasks = len(todos_info)
 
-    response = requests.get(
-        f"{url_req}/users/{employee_id}/todos",
-        params={"_expand": "user"}
-    )
-    data = response.json()
+    print("Employee {} is done with tasks({}/{}):".
+          format(employee_name, number_of_done_tasks, total_number_of_tasks))
 
-    if not len(data):
-        print("RequestError:", 404)
-        sys.exit(1)
-
-    employee_name = data[0]["user"]["name"]
-    total_tasks = len(data)
-    done_tasks = [task for task in data if task["completed"]]
-    total_done_tasks = len(done_tasks)
-
-    print(f"Employee {employee_name} is done with tasks"
-          f"({total_done_tasks}/{total_tasks}):")
-    for task in done_tasks:
-        print(f"\t {task['title']}")
+    [print("\t " + task["title"]) for task in task_completed]
